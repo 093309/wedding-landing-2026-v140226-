@@ -1,7 +1,7 @@
 @font-face {
     font-family: "Great Vibes";
     /* Имя, по которому будем обращаться */
-    src: url("fonts/GreatVibes-Regular.ttf") format("truetype");
+    src: url("../fonts/GreatVibes-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
@@ -9,7 +9,7 @@
 @font-face {
     font-family: "MontserratAlternates";
     /* Используй это имя */
-    src: url("fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf") format("truetype");
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf") format("truetype");
     font-weight: 300;
     font-style: normal;
 }
@@ -17,7 +17,7 @@
 @font-face {
     font-family: "MontserratAlternates";
     /* Используй это имя */
-    src: url("fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf") format("truetype");
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
@@ -25,7 +25,7 @@
 @font-face {
     font-family: "MontserratAlternates";
     /* Используй это имя */
-    src: url("fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf") format("truetype");
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf") format("truetype");
     font-weight: 600;
     font-style: normal;
 }
@@ -330,7 +330,7 @@ body {
     position: absolute;
     inset: 0;
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2026-01-25_16-57-26.jpg');
+        url('../images/backgrounds/photo_2026-01-25_16-57-26.jpg');
     background-size: cover;
     background-position: center;
     z-index: 1;
@@ -341,7 +341,7 @@ body {
 @media (max-width: 630px) {
     .card-bg {
         background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-            url('images/backgrounds/photo_2024-07-20_22-08-32.jpg');
+            url('../images/backgrounds/photo_2024-07-20_22-08-32.jpg');
         /* Можно чуть сместить фокус, если на мобильном фото лица смещены */
         background-position: center 10%;
     }
@@ -692,7 +692,7 @@ body {
     position: absolute;
     inset: 0;
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2024-07-20_22-08-35.jpg');
+        url('../images/backgrounds/photo_2024-07-20_22-08-35.jpg');
     background-size: cover;
     background-position: center;
     z-index: 1;
@@ -728,7 +728,7 @@ body {
     position: absolute;
     inset: 0;
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2026-02-01_00-11-09.jpg');
+        url('../images/backgrounds/photo_2026-02-01_00-11-09.jpg');
     background-size: cover;
     background-position: center;
     z-index: 1;
@@ -773,12 +773,12 @@ body {
 
 /* Заглушки для фото (замени на реальные пути) */
 .ceremomy-bg {
-    background-image: url('images/location/aaa_2587_edited.webp');
+    background-image: url('../images/location/aaa_2587_edited.webp');
     background-color: #eee;
 }
 
 .banquet-bg {
-    background-image: url('images/location/14781179.webp');
+    background-image: url('../images/location/14781179.webp');
     background-color: #ddd;
 }
 
@@ -878,7 +878,7 @@ body {
     inset: 0;
     /* Здесь можно подставить фото прогулки или колец */
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2026-01-25_17-05-55.jpg');
+        url('../images/backgrounds/photo_2026-01-25_17-05-55.jpg');
     background-size: cover;
     background-position: center;
     z-index: 0;
@@ -1019,7 +1019,7 @@ body {
     inset: 0;
     /* Здесь можно подставить фото прогулки или колец */
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2026-01-25_17-07-31.jpg');
+        url('../images/backgrounds/photo_2026-01-25_17-07-31.jpg');
     background-size: cover;
     background-position: center;
     z-index: 0;
@@ -1164,7 +1164,7 @@ body {
     position: absolute;
     inset: 0;
     background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
-        url('images/backgrounds/photo_2024-07-20_22-08-30.jpg');
+        url('../images/backgrounds/photo_2024-07-20_22-08-30.jpg');
     background-size: cover;
     background-position: center;
     z-index: 0;
