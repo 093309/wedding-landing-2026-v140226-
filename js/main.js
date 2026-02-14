@@ -313,52 +313,6 @@ function initInvitationSwiper() {
         preventDefault: true
     });
 
-    // function changeSection(index) {
-    //     if (index < 0 || index >= sections.length) return;
-    //     isAnimating = true;
-
-    //     if (cardTimelines[index]) {
-    //         cardTimelines[index].pause(0);
-    //     }
-
-    //     const isNext = index > currentIndex;
-    //     const current = sections[currentIndex];
-    //     const next = sections[index];
-
-    //     const tlMain = gsap.timeline({
-    //         onComplete: () => {
-    //             isAnimating = false;
-    //             currentIndex = index;
-
-    //             // 3. ЗАПУСК АНИМАЦИИ ПРИ ЗАВЕРШЕНИИ СВАЙПА
-    //             if (cardTimelines[index]) {
-    //                 cardTimelines[index].restart();
-    //             }
-    //         }
-    //     });
-
-    //     if (isNext) {
-    //         gsap.set(next, { autoAlpha: 1 });
-    //         tlMain.to(current, {
-    //             y: -window.innerHeight * 1.3,
-    //             rotation: -5,
-    //             opacity: 0.5,
-    //             duration: 0.9,
-    //             ease: "power2.inOut"
-    //         });
-    //         tlMain.fromTo(next, { scale: 0.95 }, { scale: 1, duration: 0.9, ease: "power2.inOut" }, "<");
-    //     } else {
-
-    //         // КАРТОЧКА ВОЗВРАЩАЕТСЯ (исправил, чтобы она не мерцала)
-    //         gsap.set(next, { autoAlpha: 1 }); // Сразу проявляем ту, что возвращаем
-    //         tlMain.fromTo(next,
-    //             { y: -window.innerHeight * 1.3, rotation: -5 },
-    //             { y: 0, rotation: 0, duration: 0.9, ease: "power2.out" }
-    //         );
-    //         tlMain.to(current, { scale: 0.95, duration: 0.9 }, "<");
-    //     }
-    // }
-
     function changeSection(index) {
         if (index < 0 || index >= sections.length) return;
         isAnimating = true;
