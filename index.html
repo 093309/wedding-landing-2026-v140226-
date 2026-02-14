@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- Фон (за карточкой) -->
+    <canvas id="petalCanvasBack" style="position:fixed; top:0; left:0; pointer-events:none; z-index:900;"></canvas>
+
+    <!-- Слой перед карточкой -->
+    <canvas id="petalCanvasFront" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
+
+
+
+    <div class="envelope-scene">
+
+        <!-- Тень под конвертом -->
+        <div class="shadow"></div>
+
+        <div class="wrapper-envelope">
+            <!-- СЛОЙ 1: Задняя стенка -->
+            <svg class="env-svg env-back" viewBox="0 0 200 120">
+                <defs>
+                    <linearGradient id="backGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#d1d1d1" />
+                        <stop offset="100%" style="stop-color:#b3b3b3" />
+                    </linearGradient>
+                </defs>
+                <rect width="200" height="120" rx="4" fill="url(#backGrad)" />
+            </svg>
+
+            <!-- СЛОЙ 2: Карточка-прокси (SVG) -->
+            <svg class="letter-svg-proxy" viewBox="0 0 200 280" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <!-- Маска, чтобы фото не вылезало за края бумаги -->
+                    <clipPath id="paperClip">
+                        <rect width="100%" height="100%" rx="4" />
+                    </clipPath>
+                </defs>
+
+                <g clip-path="url(#paperClip)">
+                    <!-- Фон бумаги -->
+                    <rect width="100%" height="100%" fill="#fff" />
+
+                    <!-- ФОТО: Замените 'data:image/...' на вашу ссылку или Base64 -->
+                    <!-- opacity="0.4" создаст эффект легкого принта на бумаге -->
+                    <image href="assets/images/backgrounds/photo_ready.jpg" x="0" y="0" width="100%" height="100%"
+                        preserveAspectRatio="xMidYMid slice" opacity="0.3" style="filter: blur(1px)" />
+                    <!-- style="filter: blur(2px);-->
+
+                    <!-- Текст поверх фото -->
+                    <g transform="translate(100, 100)" fill="#222" opacity="0.8">
+                        <text text-anchor="middle" font-family="serif" font-size="14"
+                            font-style="italic">Приглашение</text>
+                    </g>
+
+                    <!-- Полоски текста -->
+                    <g transform="translate(30, 150)" fill="#444" opacity="0.3">
+                        <rect width="140" height="3" rx="1.5" />
+                        <rect y="10" width="100" height="3" rx="1.5" />
+                        <rect y="20" width="120" height="3" rx="1.5" />
+                    </g>
+                </g>
+            </svg>
+
+
+
+            <!-- СЛОЙ 3: Передняя часть (кармашек) -->
+            <svg class="env-svg env-front" viewBox="0 0 200 120" style="overflow: visible;">
+                <!-- Рисуем "карман": из верхних углов к центру и вниз -->
+                <path d="M0 0 L100 65 L200 0 V120 H0 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="0.5" />
+            </svg>
+
+            <!-- СЛОЙ 4: Крышка -->
+            <svg class="env-svg env-flap" viewBox="0 0 200 120">
+                <path d="M0 0 L100 75 L200 0" fill="#f9f9f9" stroke="#d1d1d1" stroke-width="0.5" />
+            </svg>
+
+            <!-- СЛОЙ 5: Печать (отдельный SVG) -->
+            <svg class="env-svg env-seal" viewBox="0 0 200 120">
+                <defs>
+                    <radialGradient id="sealGrad" cx="35%" cy="35%" r="50%">
+                        <stop offset="0%" style="stop-color:#cf3a3a" />
+                        <stop offset="100%" style="stop-color:#8b1a1a" />
+                    </radialGradient>
+                    <filter id="sealShadow">
+                        <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.5" />
+                    </filter>
+                </defs>
+
+                <g class="seal-group" filter="url(#sealShadow)">
+                    <!-- Основа печати (сургуч) -->
+                    <path d="M100,55 Q115,55 118,70 Q118,85 100,88 Q82,85 82,70 Q82,55 100,55" fill="url(#sealGrad)" />
+
+                    <!-- Декоративный ободок внутри (чтобы ограничить пространство) -->
+                    <circle cx="100" cy="71.5" r="13.5" fill="none" stroke="#631111" stroke-width="0.6" opacity="0.3" />
+
+                    <!-- Инициалы А & М (уменьшены, чтобы быть строго внутри круга) -->
+                    <text x="100" y="75" font-family="'Times New Roman', serif" font-size="9" fill="#5a0f0f"
+                        text-anchor="middle" font-weight="bold"
+                        style="opacity: 0.8; letter-spacing: -0.5px; pointer-events: none; user-select: none;">
+                        A & M
+                    </text>
+
+                    <!-- Легкий эффект гравировки (светлый контур снизу) -->
+                    <text x="100.3" y="75.3" font-family="'Times New Roman', serif" font-size="9" fill="#ffffff"
+                        text-anchor="middle" font-weight="bold"
+                        style="opacity: 0.15; pointer-events: none; user-select: none;">
+                        A & M
+                    </text>
+                </g>
+
+            </svg>
+        </div>
+
+
+
+
+    </div>
+
+    <!-- Контейнер лендинга, который мы будем проявлять -->
+
+    <div class="landing-card">
+        <div class="landing-scroll-area">
+            <!-- Секция 1 -->
+            <section class="section first-page">
+                <!-- Фоновое изображение -->
+                <div class="card-bg"></div>
+
+                <!-- Контент поверх фото -->
+                <div class="card-content">
+                    <div class="status-badge">
+                        <p>Приглашение на свадьбу</p>
+                    </div>
+                    <div class="names">
+                        <span>Антон</span>
+                        <div class="and">&</div>
+                        <span>Маргарита</span>
+                    </div>
+                    <div class="divider"></div>
+                    <p class="date-hero">01.08.2026</p>
+                    <p class="scroll-hint">Листайте вверх ↑</p>
+                </div>
+            </section>
+
+            <!-- Секция 2 приветсвтие-->
+            <section class="section welcome-page">
+                <!-- Твое готовое фоновое фото с блюром -->
+                <div class="second-section-bg-image"></div>
+
+                <div class="card-content">
+                    <!-- Центральная панель с текстом и таймером -->
+                    <div class="glass-panel anim-item">
+                        <h2 class="section-title anim-title">Дорогие гости!</h2>
+
+                        <p class="welcome-text anim-text">
+                            Один из самых счастливых дней в нашей жизни мы хотим разделить с вами.
+                            Ваше присутствие для нас — самый ценный подарок. <br>
+                            <span>Ждем вас на нашем празднике!</span>
+                        </p>
+
+                        <div class="divider-pink anim-item"></div>
+
+                        <!-- Блок таймера -->
+                        <div class="timer-wrapper-simple">
+                            <p class="timer-label-top anim-text">До торжества осталось:</p>
+                            <div class="timer anim-item" id="countdown">
+                                <div class="timer-item">
+                                    <span class="timer-value" id="days">00</span>
+                                    <span class="timer-label">дней</span>
+                                </div>
+                                <div class="timer-item">
+                                    <span class="timer-value" id="hours">00</span>
+                                    <span class="timer-label">часов</span>
+                                </div>
+                                <div class="timer-item">
+                                    <span class="timer-value" id="minutes">00</span>
+                                    <span class="timer-label">минут</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Секция 3: Локации -->
+            <section class="section locations-page">
+
+                <!-- Общее фоновое фото для всей карточки -->
+                <div class="locations-section-bg"></div>
+
+                <div class="card-content">
+                    <h2 class="section-title anim-title">Где и когда</h2>
+
+                    <div class="locations-container">
+                        <!-- Локация 1: ЗАГС -->
+                        <a href="https://yandex.ru/maps/org/1008841937" target="_blank"
+                            class="location-card anim-item ceremomy-bg">
+                            <div class="location-overlay">
+                                <div class="location-info">
+                                    <span class="location-type anim-text">Церемония</span>
+                                    <h3 class="location-name anim-text">Дворец бракосочетания №3</h3>
+                                    <p class="location-address anim-text">г. Пушкин, ул. Садовая, д.22</p>
+                                    <span class="location-link-hint anim-text">Построить маршрут →</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Локация 2: Банкет -->
+                        <a href="https://yandex.ru/maps/org/1031049706" target="_blank"
+                            class="location-card anim-item banquet-bg">
+                            <div class="location-overlay">
+                                <div class="location-info">
+                                    <span class="location-type anim-text">Банкет</span>
+                                    <h3 class="location-name anim-text">Вилла Счастья</h3>
+                                    <p class="location-address anim-text">г. Гатчина, Двинская ул., д.7</p>
+                                    <span class="location-link-hint anim-text">Построить маршрут →</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Секция 4 тайинг -->
+            <section class="section timeline-page">
+                <!-- Фоновое изображение (как в прошлых секциях) -->
+                <div class="card-bg third-section-bg-image"></div>
+
+                <div class="card-content">
+                    <!-- Заголовок с анимационным классом -->
+                    <h2 class="section-title anim-title">Программа</h2>
+
+                    <!-- Контейнер программы -->
+                    <div class="timeline-container anim-item">
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">13:20</span>
+                            <p class="event anim-text">Выезд из города, сбор у ст.м. Технологический институт</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">14:00</span>
+                            <p class="event anim-text">Сбор возле Дворца бракосочетания №3</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">14:20</span>
+                            <p class="event anim-text">Торжественная церемония</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">15:00</span>
+                            <p class="event anim-text">Выезд на место проведения банкета</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">15:40</span>
+                            <p class="event anim-text">Начало праздничной программы</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <span class="time anim-text">22:00</span>
+                            <p class="event anim-text">Окончание банкета, трансфер до города</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Секция 5 ДРЕСС КОД-->
+            <section class="section dress-code-page">
+                <!-- Фоновое изображение (то же, что в локациях для единства стиля) -->
+                <div class="dress-section-bg"></div>
+                <h2 class="section-title anim-title">Детали</h2>
+
+                <div class="card-content">
+
+                    <div class="glass-panel anim-item">
+                        <p class="dress-code-text anim-text">
+                            Наша свадьба пройдет в гармонии с природой. Мы будем рады видеть вас в одежде естественных,
+                            приглушенных тонов.
+                        </p>
+
+                        <!-- Контейнер для кругов палитры -->
+                        <div class="palette-container anim-item">
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #c2bcc6;"></div>
+                                <span>Пепельный</span>
+                            </div>
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #5F7D61;"></div>
+                                <span>Оливковый</span>
+                            </div>
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #8B5E3C;"></div>
+                                <span>Терракот</span>
+                            </div>
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #BB9847;"></div>
+                                <span>Золотой</span>
+                            </div>
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #34495E;"></div>
+                                <span>Индиго</span>
+                            </div>
+                            <div class="swatch-item">
+                                <div class="swatch" style="background-color: #000;"></div>
+                                <span>Черный</span>
+                            </div>
+                        </div>
+
+                        <p class="dress-code-text anim-text">
+                            И пожалуйста, не утруждайте себя выбором подарков и поиском цветов. Мы сразу после свадьбы
+                            улетаем в путешествие, поэтому будем очень рады вашим пожеланиям в конвертах.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Секция 6 -->
+            <section class="section rsvp-page">
+                <div class="rsvp-section-bg"></div>
+                <div class="card-content">
+                    <div class="glass-panel anim-item">
+                        <h2 class="section-title anim-title">Ваш ответ</h2>
+                        <p class="welcome-text anim-text">Пожалуйста, подтвердите ваше присутствие до 15 марта</p>
+
+                        <!-- Блок выбора -->
+                        <div class="rsvp-selection anim-item" id="rsvp-controls">
+                            <button class="btn btn-primary" onclick="showRSVPForm(true)">Я приду</button>
+                            <button class="btn btn-outline" onclick="showRSVPForm(false)">Меня не будет</button>
+                        </div>
+
+                        <!-- Форма "Я приду" -->
+                        <form id="form-yes" class="rsvp-form hidden">
+
+                            <!-- <p class="welcome-text anim-text">Славно☺️, пофестивалим😎, зполни, пожалуйста мини-анкету </p> -->
+
+                            <div class="input-group anim-item">
+                                <input type="text" name="name" placeholder="Имя и Фамилия" required>
+                            </div>
+
+                            <div class="input-row anim-item">
+                                <div class="input-group">
+                                    <select name="guests" required>
+                                        <option value="" disabled selected>Количество гостей</option>
+                                        <option value="один">Я один / одна</option>
+                                        <option value="двое">Будем вдвоем</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-group anim-item">
+                                <label class="label-hint">Трансфер:</label>
+                                <select name="transfer">
+                                    <option value="Туда-обратно">Туда и обратно</option>
+                                    <option value="до площадки">Только до площадки</option>
+                                    <option value="нет">Доберусь сам</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group anim-item">
+                                <label class="label-hint">Проживание:</label>
+                                <select name="hotel">
+                                    <option value="в отеле">Остаюсь в отеле</option>
+                                    <option value="дома">Уеду после банкета</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group anim-item">
+                                <label class="label-hint">Предпочтения по бару:</label>
+                                <div class="checkbox-grid">
+                                    <label><input type="checkbox" name="bar" value="вин.бел."> Вино бел.</label>
+                                    <label><input type="checkbox" name="bar" value="вин.кр."> Вино кр.</label>
+                                    <label><input type="checkbox" name="bar" value="крепыш"> Покрепче</label>
+                                    <label><input type="checkbox" name="bar" value="чай"> Лимонад</label>
+                                </div>
+                            </div>
+
+                            <div class="input-group anim-item">
+                                <textarea name="comment" placeholder="Пожелания (Гости, аллергии...)"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary anim-item">Отправить</button>
+                        </form>
+
+                        <!-- ВОТ ОНО: Блок благодарности -->
+                        <div id="rsvp-thanks" class="rsvp-thanks hidden" style="text-align: center; padding: 20px;">
+                            <h3
+                                style="font-family: var(--font-accent); font-size: 2.2rem; color: var(--color-primary); margin-bottom: 10px;">
+                                Славно! ❤️</h3>
+                            <p style="font-size: 1.1rem; line-height: 1.4; color: var(--color-text-light);">Ваш ответ
+                                успешно сохранен.<br>Пофестивалим! 😎</p>
+                        </div>
+
+                        <!-- Блок "Не приду" -->
+                        <div id="form-no" class="rsvp-decline hidden">
+                            <div class="sad-image anim-item">😔</div>
+                            <p class="anim-text">Нам очень жаль, что вы не сможете разделить с нами этот день. Мы будем
+                                скучать!</p>
+                            <button class="btn btn-outline anim-item" onclick="resetRSVP()">Изменить
+                                решение</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    </div>
+
+
+
+
+    <script src="assets/lib/gsap-public/minified/gsap.min.js"></script>
+    <script src="assets/lib/gsap-public/minified/Observer.min.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

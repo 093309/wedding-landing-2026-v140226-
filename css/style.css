@@ -1,0 +1,1518 @@
+@font-face {
+    font-family: "Great Vibes";
+    /* Имя, по которому будем обращаться */
+    src: url("../fonts/GreatVibes-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "MontserratAlternates";
+    /* Используй это имя */
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "MontserratAlternates";
+    /* Используй это имя */
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "MontserratAlternates";
+    /* Используй это имя */
+    src: url("../fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+:root {
+    /* --- ЦВЕТОВАЯ ПАЛИТРА --- */
+    /* --color-primary: #ff4d6d; */
+    --color-primary: #ECDCAF;
+    /* Основной акцент (лепестки, кнопки, &) */
+    --color-bg-card: #ffffff;
+    /* Фон всех карточек */
+    --color-text-dark: #2d2d2d;
+    /* Основной текст на белом фоне */
+    --color-text-light: #ffffff;
+    /* Текст поверх фотографий */
+    --color-overlay: rgba(0, 0, 0, 0.35);
+    /* Затемнение фото для читаемости */
+
+    /* --- ШРИФТЫ --- */
+    /* Playfair Display - классика для имен, Montserrat - современный для инфо */
+    --font-accent: "Great Vibes", cursive;
+    --font-main: "MontserratAlternates", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fdf6f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    font-family: var(--font-main);
+    color: var(--text-main);
+    -webkit-tap-highlight-color: transparent;
+    /* Для Safari и Chrome на мобильных */
+    outline: none;
+}
+
+
+.great-vibes-regular {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+
+.envelope-scene {
+    position: relative;
+    /* Центрируем сцену, если нужно */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    user-select: none;
+}
+
+.wrapper-envelope {
+    position: relative;
+    /* АДАПТИВ: Используем ширину в vw с ограничением в px */
+    width: 85vw;
+    max-width: 400px;
+    /* АДАПТИВ: Сохраняем пропорции 1.66 (400/240) через aspect-ratio */
+    aspect-ratio: 400 / 240;
+    margin: 20px auto;
+    perspective: 1200px;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    /* Убирает синий блик на смартфонах */
+    user-select: none;
+    /* Запрещает выделение текста */
+    outline: none;
+    overflow: visible;
+    /* touch-action: none; */
+    /* transform: rotateX(15deg) rotateZ(-5deg) ; */
+    /* transform-style: preserve-3d;   */
+}
+
+/* тень от конверат */
+.shadow {
+    position: absolute;
+    bottom: -25px;
+    /* Смещаем чуть ниже конверта */
+    left: 0;
+    width: 85%;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    filter: blur(8px);
+    /* Размытие для мягкости */
+    z-index: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.env-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: block;
+    /* Улучшаем отрисовку SVG */
+    shape-rendering: geometricPrecision;
+}
+
+
+.letter-svg-proxy {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    /* Между back и front */
+    pointer-events: none;
+    will-change: transform, opacity;
+    filter: blur(2px);
+
+}
+
+.env-front {
+    z-index: 10;
+    pointer-events: none;
+}
+
+.env-flap {
+    z-index: 15;
+    transform-origin: top;
+    /* По умолчанию закрыта. В GSAP будем анимировать до 180deg или -180deg */
+    transform: rotateX(0deg);
+    will-change: transform;
+}
+
+.env-seal {
+    z-index: 20 !important;
+    /* Поверх всего */
+    transform-origin: top;
+    /* Чтобы крутилась вместе с крышкой */
+    pointer-events: auto;
+    cursor: pointer;
+    will-change: transform;
+    overflow: visible;
+}
+
+/* АДАПТИВ: Уменьшаем заголовки на мобилках */
+.card-inner h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: clamp(1rem, 5vw, 1.5rem);
+}
+
+.card-inner p {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+}
+
+.landing-card {
+    position: fixed;
+    width: 95dvw;
+    /* Почти на весь экран на мобилках */
+    max-width: 850px;
+    /* Ограничение на десктопе */
+    height: 95dvh;
+    max-height: 850px;
+
+    /* background: #ffffff; */
+    background: transparent !important;
+    border-radius: 20px;
+
+    /* Состояние до анимации */
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: visible !important;
+}
+
+.landing-scroll-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    /* Паддинги лучше перенести внутрь .section */
+}
+
+/* Скроллбар (опционально, для красоты) */
+.landing-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.landing-scroll-area::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.section {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* ПЕРЕНОСИМ стили сюда */
+    /* background: #ffffff; */
+    background: transparent !important;
+    border-radius: 24px;
+    /* box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12); */
+
+    padding: 20px 15px;
+    box-sizing: border-box;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: none !important;
+
+    /* Скрываем по умолчанию для GSAP */
+    /* visibility: hidden; */
+}
+
+.section:first-child {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Универсальный стиль заголовков для всех карточек */
+.section-title {
+    font-family: var(--font-main);
+    color: var(--color-text-light);
+    /* Всегда белый по умолчанию для темных фонов */
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+    /* Чтобы заголовок был выше блюра и фонов */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    /* Добавляем тень для читаемости на светлых фото */
+}
+
+/* Если где-то нужен темный заголовок (на чистом белом фоне), 
+   можно будет добавить класс-модификатор .section-title--dark */
+
+
+.petal {
+    position: fixed;
+    top: -50px;
+    /* Начинают за пределами экрана сверху */
+    width: 16px;
+    height: 20px;
+    background: #ff4d6d;
+    border-radius: 50% 0 50% 50%;
+    z-index: 999;
+    /* Чуть ниже основной карточки, чтобы не мешать тексту */
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+
+.second-section-bg-image,
+.locations-section-bg,
+.program-bg,
+.dresscode-bg {
+    opacity: 0;
+    transform: scale(0.95);
+    /* Легкий зум для динамики проявления */
+    transition: none;
+}
+
+
+
+
+/* ------------------------------------------- 1 СЕКЦИЯ ВСТУПЛЕНИЕ --------------------------------*/
+.first-page .status-badge,
+.first-page .names,
+.first-page .divider,
+.first-page .date-hero,
+.first-page .scroll-hint {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Специальные стили для первой карточки */
+.first-page {
+    padding: 0 !important;
+    /* Убираем падинги, чтобы фото было в край */
+    color: #fff;
+    /* Белый текст для контраста с фото */
+    text-align: center;
+    user-select: none;
+}
+
+/* Основное фото для больших экранов */
+.card-bg {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2026-01-25_16-57-26.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    border-radius: 24px;
+}
+
+/* Фото для мобильных устройств (до 630px) */
+@media (max-width: 630px) {
+    .card-bg {
+        background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+            url('../images/backgrounds/photo_2024-07-20_22-08-32.jpg');
+        /* Можно чуть сместить фокус, если на мобильном фото лица смещены */
+        background-position: center 10%;
+    }
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* Имена */
+.names {
+    font-family: var(--font-accent);
+    /* Или другой красивый шрифт */
+    font-size: clamp(3rem, 10vw, 3.5rem);
+    /* Адаптивный размер текста */
+    line-height: 1.2;
+    margin: 20px 0;
+}
+
+.names span {
+    display: block;
+}
+
+.and {
+    font-family: 'Cormorant Garamond', italic;
+    font-style: italic;
+    font-size: 0.6em;
+    margin: 5px 0;
+    opacity: 0.8;
+}
+
+.date-hero {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+.divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.6);
+    margin: 15px 0;
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-5px);
+    }
+
+    60% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Бейдж */
+.status-badge {
+    position: relative;
+    /* Центрирование */
+    margin: 0 auto;
+    display: table;
+    /* Заставляет фон облегать текст, а не растягиваться во всю ширину */
+
+    /* "Резиновость" и размеры */
+    width: auto;
+    min-width: 180px;
+    /* Минимальный порог, чтобы не был слишком коротким */
+    max-width: 80%;
+    /* Не дает прилипать к краям экрана на мобильных */
+
+    top: -55px;
+
+    /* Оформление */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(3px);
+    padding: 10px 25px;
+    /* Немного увеличил отступы для солидности */
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Текст */
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-align: center;
+    /* Центрирует текст внутри бейджа */
+    color: #fff;
+    /* Убедитесь, что цвет задан, если фон светлый */
+
+
+    white-space: nowrap;
+    /* Запрещает перенос строки, чтобы бейдж держал форму */
+
+
+}
+
+/* -------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------- 2 СЕКЦИЯ ТАЙМЕР ПРИГЛАСИТЕЛЬНЫЙ ТЕКСТ --------------------------------*/
+/* Контейнер секции */
+
+/* 1. Элементы контента - ИЗНАЧАЛЬНО СКРЫТЫ */
+.welcome-page .glass-panel,
+.welcome-page .anim-title,
+.welcome-page .anim-text,
+.welcome-page .divider-pink,
+.welcome-page .timer-item {
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: transform, opacity;
+    /* Для плавности на мобилках */
+}
+
+/* 3. Розовая линия - СХЛОПНУТА */
+.welcome-page .divider-pink {
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+}
+
+.welcome-page .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Уменьшаем паддинги, чтобы панель могла быть шире */
+    padding: 1rem 0.8rem;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 10;
+    color: var(--color-primary) !important;
+
+}
+
+/* Стеклянная панель */
+.glass-panel {
+    width: 100%;
+    max-width: 650px;
+    /* Убираем фиксированную высоту, даем подстраиваться под контент */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 1rem 1.1rem;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+
+.welcome-text {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0;
+    color: var(--color-text-light);
+    font-weight: 300;
+}
+
+.welcome-text span {
+    display: block;
+    margin-top: 0.8rem;
+    font-family: var(--font-accent);
+    font-size: 1.8rem;
+    /* На мобильных */
+    color: var(--color-primary);
+    line-height: 1.2;
+}
+
+.divider-pink {
+    width: 30px;
+    height: 2px;
+    background: var(--color-primary);
+    margin: 0.5rem auto;
+}
+
+/* Таймер внутри панели */
+.timer-label-top {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.timer {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.timer-item {
+    gap: 3px;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: flex-end;
+    min-width: 60px;
+    /* Чтобы цифры не прыгали */
+}
+
+
+.timer-value {
+    font-size: 1.8rem;
+    color: #fff;
+    line-height: 1;
+}
+
+.timer-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+
+
+
+/* Настройки для десктопа (мониторы и широкие планшеты) */
+@media (min-width: 768px) {
+    .glass-panel {
+        max-width: 650px;
+        padding: 3rem 0;
+        /* Больше внутренних отступов */
+        border-radius: 32px;
+    }
+
+    .welcome-text {
+        font-size: 1.2rem;
+        /* Увеличиваем основной текст */
+        line-height: 1.7;
+    }
+
+    .welcome-text span {
+        font-size: 2.2rem;
+        /* Делаем розовый курсив выразительным */
+        margin-top: 1.5rem;
+    }
+
+    .divider-pink {
+        width: 60px;
+        /* Длиннее разделитель */
+        margin: 1.5rem auto;
+    }
+
+    .timer-label-top {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+
+    }
+
+    .timer {
+        gap: 2.5rem;
+        /* Больше расстояние между цифрами */
+    }
+
+    .timer-value {
+        font-size: 2.5rem;
+        /* Массивные цифры */
+    }
+
+    .timer-label {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+}
+
+
+/* Адаптив для маленьких iPhone SE */
+@media (max-height: 700px) {
+    .glass-panel {
+        padding: 1.2rem 1rem;
+        gap: 0.6rem;
+        /* Сжимаем всё расстояние между элементами */
+    }
+
+    .welcome-text {
+        font-size: 0.9rem;
+    }
+
+    .welcome-text span {
+        font-size: 1.4rem;
+        margin-top: 0.3rem;
+    }
+
+    .divider-pink {
+        margin: 0.2rem auto;
+    }
+
+    .timer-value {
+        font-size: 1.5rem;
+    }
+
+    .timer-label-top {
+        font-size: 0.6rem;
+        margin-bottom: 0.2rem;
+    }
+}
+
+/* Совсем для крошечных экранов (iPhone SE старый) */
+@media (max-height: 600px) {
+    .glass-panel {
+        gap: 0.4rem;
+    }
+
+    .welcome-text br {
+        display: none;
+    }
+
+    /* Убираем переносы строк */
+}
+
+/* 2. Фон - ИЗНАЧАЛЬНО ВИДИМ (чтобы летел вместе с секцией) */
+.second-section-bg-image {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2024-07-20_22-08-35.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    border-radius: 24px;
+    opacity: 0;
+    /* Ставим 1, чтобы фото было видно сразу при свайпе */
+    transform: scale(0.9);
+    /* Начальный масштаб для эффекта глубины */
+    filter: blur(0px);
+    overflow: hidden;
+}
+
+/* -------------------------------------------------------------------------------------- */
+
+
+
+
+/* ------------------------------------------- 3 СЕКЦИЯ ЛОКАЦИЯ --------------------------------*/
+
+/* Контейнер для карточек локаций */
+.locations-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    flex: 1;
+    /* Заполняет оставшееся пространство секции */
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.locations-section-bg {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2026-02-01_00-11-09.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    border-radius: 24px;
+    /* filter: blur(2px); */
+    overflow: hidden;
+
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+/* Заголовок и карточки локаций */
+.locations-page .anim-title,
+.locations-page .location-card {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Текст внутри карточек (для более детального появления) */
+.locations-page .anim-text {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Общий стиль плитки-ссылки */
+.location-card {
+    position: relative;
+    flex: 1;
+    border-radius: 15px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease;
+}
+
+.location-card:active {
+    transform: scale(0.98);
+}
+
+/* Заглушки для фото (замени на реальные пути) */
+.ceremomy-bg {
+    background-image: url('../images/location/aaa_2587_edited.webp');
+    background-color: #eee;
+}
+
+.banquet-bg {
+    background-image: url('../images/location/14781179.webp');
+    background-color: #ddd;
+}
+
+/* Затемнение поверх фото для читаемости текста */
+.location-overlay {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.location-info {
+    color: var(--color-text-light);
+    font-family: var(--font-main);
+}
+
+.location-type {
+    display: block;
+    font-family: var(--font-accent);
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.location-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.location-address {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.location-link-hint {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid var(--color-primary);
+    padding-bottom: 2px;
+}
+
+/* Адаптивность для маленьких экранов (iPhone SE) */
+@media (max-height: 670px) {
+    .location-type {
+        font-size: 1.2rem;
+    }
+
+    .location-name {
+        font-size: 0.9rem;
+    }
+
+    .location-address {
+        font-size: 0.75rem;
+    }
+
+    .locations-container {
+        gap: 10px;
+    }
+}
+
+/* -------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------- 4 СЕКЦИЯ ПРОГРАММА --------------------------------*/
+
+.timeline-page .anim-title {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Фоновое изображение секции */
+.third-section-bg-image {
+    position: absolute;
+    inset: 0;
+    /* Здесь можно подставить фото прогулки или колец */
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2026-01-25_17-05-55.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-radius: 24px;
+    /* filter: blur(2px); */
+    /* Легкий блюр для глубины */
+    transform: scale(1);
+    opacity: 0;
+}
+
+.timeline-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Занимаем всю высоту модалки */
+    overflow: hidden;
+    /* Чтобы сама секция не скроллилась криво */
+}
+
+.timeline-page .card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Центрируем всё содержимое секции */
+    padding: 2vh 1rem;
+    /* Используем vh для паддингов, чтобы они таяли на низких экранах */
+}
+
+/* Контейнер списка с эффектом стекла */
+.timeline-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+
+    /* Убираем жесткий gap, будем использовать flex-дробление */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Распределяет пункты равномерно по высоте */
+
+    /* Делаем контейнер гибким по высоте */
+    flex: 1 1 auto;
+    min-height: 0;
+    /* Важно для сжатия внутри flex-родителя */
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 30px;
+    padding: 1.5rem 2rem;
+    opacity: 0;
+}
+
+@media (max-width: 450px) {
+    .timeline-container {
+        padding: 2.5rem 1rem;
+    }
+
+    .timeline-page .card-content {
+        padding: 2vh 0rem;
+    }
+
+    .third-section-bg-image {
+        background-position: 36% center;
+    }
+
+}
+
+.timeline-page .section-title {
+    margin-bottom: 1rem;
+}
+
+/* Стилизация отдельного пункта */
+.timeline-item {
+    display: flex;
+    align-items: center;
+    /* Центрируем время и текст по горизонтали */
+    gap: 1.5rem;
+    flex: 1 1 auto;
+    /* Позволяет пунктам самим делить высоту */
+    padding: 0.5rem 0;
+    opacity: 0;
+    margin-bottom: 15px;
+    transition: none !important;
+}
+
+
+/* Акцентное время */
+.time {
+    font-size: clamp(1rem, 2.2vh, 1.2rem);
+    color: var(--color-primary);
+}
+
+/* Текст события */
+.event {
+    font-size: clamp(0.9rem, 2vh, 1.1rem);
+    /* Текст уменьшится на маленьких экранах */
+    line-height: 1.2;
+    color: var(--color-text-light);
+}
+
+.anim-title {
+    margin-bottom: 2vh;
+    /* Гибкий отступ под заголовком */
+    font-size: clamp(1.5rem, 4vh, 2.5rem);
+    /* Заголовок тоже станет меньше, если экран низкий */
+}
+
+
+/* -------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------- 5 СЕКЦИЯ ДРЕСКОД --------------------------------*/
+.dress-code-page .anim-title,
+.dress-code-page .glass-panel,
+.dress-code-page .dress-code-text {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Текст внутри панели дресс-кода */
+.dress-code-page .glass-panel {
+    margin-top: 10px;
+    padding: 6px 20px;
+    color: var(--color-text-light);
+    /* Немного больше внутренних отступов */
+}
+
+.dress-section-bg {
+    position: absolute;
+    inset: 0;
+    /* Здесь можно подставить фото прогулки или колец */
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2026-01-25_17-07-31.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-radius: 24px;
+    /* filter: blur(2px); */
+    /* Легкий блюр для глубины */
+    transform: scale(0.95);
+    opacity: 0;
+}
+
+.dress-code-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    /* margin-bottom: 10px; */
+    color: var(--color-text-light);
+}
+
+.dress-code-text:last-child {}
+
+/* Контейнер для кругов */
+.palette-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Разрешаем перенос на новую строку */
+    justify-content: center;
+    /* Центрируем кружки */
+    gap: 15px 10px;
+    /* 15px между рядами, 10px между кружками */
+    margin: 20px auto;
+    width: 100%;
+    /* Занимаем всю ширину панели */
+    max-width: 320px;
+    /* Чуть увеличим лимит для гибкости */
+    box-sizing: border-box;
+}
+
+.swatch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 1 28%;
+    /* Занимает примерно 1/3 ширины, но может сужаться */
+    min-width: 70px;
+    /* Чтобы текст не сжимался слишком сильно */
+    opacity: 0;
+    transform: scale(0) translateY(15px);
+    will-change: transform, opacity;
+}
+
+.swatch {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    /* border: 3px solid white; */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8px;
+    will-change: transform, opacity;
+    /* Ускоряет рендер на мобилках */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    /* Мягкий контур, чтобы кружки не сливались с фоном */
+}
+
+.swatch:active {
+    transform: scale(0.9);
+}
+
+.swatch-item span {
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    /* Чуть уменьшим базу для мобилок */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* Уменьшим разрядку, чтобы слова не вылезали */
+    color: var(--color-text-light);
+    opacity: 0.8;
+    text-align: center;
+    white-space: nowrap;
+    /* Запрещаем перенос слова внутри названия */
+}
+
+.dress-code-hint {
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    text-align: center;
+    font-style: italic;
+    color: var(--color-text-light);
+}
+
+.dress-code-hint span {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* ПЕРЕКЛЮЧЕНИЕ В РЯД: для экранов шире 400px (iPhone Pro/Max, Pixel и т.д.) */
+@media (min-width: 450px) {
+    .palette-container {
+        max-width: 100%;
+        gap: 20px;
+    }
+
+    .swatch {
+        width: 55px;
+        /* Чуть уменьшаем, чтобы точно влезли в ряд с отступами */
+        height: 55px;
+    }
+
+    .swatch-item {
+        flex: 0 1 auto;
+        /* На широких экранах пусть стоят в ряд */
+    }
+}
+
+@media (max-width: 370px) {
+    .dress-code-text {
+        font-size: 0.88rem;
+    }
+
+    .dress-code-page .glass-panel {
+        margin-top: 0;
+    }
+}
+
+/* -------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+/* ------------------------------------------- 6 СЕКЦИЯ АНКЕТА --------------------------------*/
+/* Начальное состояние 6 секции */
+.rsvp-page .anim-title,
+.rsvp-page .anim-text,
+.rsvp-page .rsvp-selection {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.rsvp-section-bg {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--color-overlay), var(--color-overlay)),
+        url('../images/backgrounds/photo_2024-07-20_22-08-30.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-radius: 24px;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .rsvp-section-bg {
+        transform: scale(1);
+        /* Первое значение — горизонталь (X), второе — вертикаль (Y) */
+        /* 70% сместит фокус картинки вправо, тем самым само изображение "уйдет" влево */
+        background-position: 70% 100%;
+        /* Если нужно более радикально, можно использовать пиксели: */
+        /* background-position: -50px center; */
+    }
+}
+
+.rsvp-page .glass-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 500px;
+    background: var(--color-overlay);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 25px 20px;
+    /* Базовый отступ */
+    display: flex;
+    flex-direction: column;
+    max-height: 92vh;
+    /* Чтобы точно влезло в карточку 95vh */
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Запрещаем скролл всей панели */
+}
+
+.rsvp-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    /* Отступы по краям на малых экранах */
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Запрещаем скролл секции, всё должно влезть */
+}
+
+.rsvp-selection {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Состояния форм */
+.rsvp-form,
+.rsvp-decline {
+    display: none;
+    /* Сначала скрыты полностью */
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Кнопки */
+.btn {
+    font-family: var(--font-main);
+    padding: 12px 20px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-text-light);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Форма */
+.rsvp-form {
+    width: 100%;
+    margin: 15px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Оптимальный зазор */
+}
+
+.rsvp-form > div {
+    margin-bottom: 10px; /* Расстояние между блоками */
+}
+
+.rsvp-form > div:last-child {
+    margin-bottom: 0;
+}
+
+.input-row {
+    margin-bottom: 10px !important;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+input::placeholder, 
+textarea::placeholder {
+  color: rgba(0, 0, 0, 0.3); /* Твой цвет с прозрачностью 0.3 */
+  opacity: 1; /* Важно для Firefox, иначе он накладывает свою прозрачность сверху */
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    padding: 12px 14px;
+    /* Удобный размер для пальца */
+    font-size: 16px;
+    /* Защита от автозума на iPhone */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    box-sizing: border-box;
+}
+
+.label-hint {
+    font-size: 0.7rem;
+    color: var(--color-primary);
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.checkbox-grid {
+    display: grid;
+    color: var(--color-text-light);
+    grid-template-columns: repeat(2, auto);
+    /* Колонки по ширине контента */
+    justify-content: center;
+    /* Прижимаем к левому краю */
+    gap: 10px 25px;
+    /* Расстояние между колонками */
+    margin: 5px 0;
+}
+
+.checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    /* Чуть крупнее текст */
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+    height: 45px;
+    /* Маленькая высота, чтобы влезло */
+
+    max-height: 120px;
+     overflow: hidden; 
+    -webkit-overflow-scrolling: touch;
+}
+
+.rsvp-page textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+.rsvp-page textarea::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+    opacity: 0.3;
+}
+
+.checkbox-grid input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--color-primary);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Блок отказа */
+.rsvp-page .rsvp-decline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* padding: 30px 10px; */
+    /* Внутренние отступы блока */
+}
+
+/* Класс для активной формы, который мы будем давать через JS */
+/* .rsvp-active {
+    display: block !important;
+} */
+
+.rsvp-form, 
+#rsvp-thanks, 
+#form-yes, 
+#form-no {
+    display: none;
+    opacity: 0;
+}
+
+.rsvp-form.rsvp-active,
+#form-yes.rsvp-active,
+#form-no.rsvp-active {
+    display: block !important; /* Здесь !important можно оставить, чтобы перебить hidden */
+}
+
+
+.rsvp-page .sad-image {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    /* Отступ от смайлика до текста */
+}
+
+.rsvp-page .rsvp-decline .anim-text {
+    margin-bottom: 25px;
+    /* Тот самый отступ от текста до кнопки */
+    line-height: 1.5;
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+/* .rsvp-active .anim-text,
+.rsvp-active .anim-item,
+.rsvp-active .sad-image {
+    opacity: 1 !important;
+    transform: none !important;
+} */
+
+#rsvp-thanks.rsvp-active {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 1; /* Чтобы GSAP потом подхватил */
+}
+
+/* Адаптивность для iPhone SE */
+@media (min-height: 800px) {
+    .glass-panel {
+        padding: 35px;
+    }
+}
+
+@media (max-height: 700px) {
+    .rsvp-page .glass-panel {
+        padding: 15px 20px;
+        /* Сжимаем внутренние поля панели */
+    }
+
+    .section-title {
+        font-size: 1.3rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .welcome-text {
+        font-size: 0.8rem !important;
+        margin-bottom: 5px !important;
+    }
+
+    .rsvp-form {
+        gap: 6px;
+        /* Минимум пространства между полями */
+        margin-top: 10px;
+    }
+
+    .input-group input,
+    .input-group select {
+        padding: 8px 12px;
+        /* Поля становятся ниже */
+    }
+
+    .checkbox-grid {
+        gap: 5px 15px;
+        margin: 2px 0;
+    }
+
+    textarea {
+        height: 40px;
+        /* Совсем маленькое поле для комментариев */
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+
+    .rsvp-page .rsvp-decline {
+        padding: 10px 0;
+    }
+
+    .rsvp-page .sad-image {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .rsvp-page .rsvp-decline .anim-text {
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Для высоких телефонов (даем больше воздуха) */
+@media (min-height: 800px) {
+    .rsvp-page .glass-panel {
+        padding: 35px 25px;
+    }
+
+    .rsvp-form {
+        gap: 15px;
+    }
+}
+
+.textpp {
+    color: var(--color-text-light);
+    display: inline-block;
+    bottom: 0;
+}
+
+/* ФИКС ФОНА */
+@media (max-width: 480px) {
+    .rsvp-section-bg {
+        transform: scale(1.1);
+        /* Уменьшил с 1.2, чтобы не мылило */
+        background-position: 70% 100%;
+    }
+}
+
+
+/* -------------------------------------------------------------------------------------- */
