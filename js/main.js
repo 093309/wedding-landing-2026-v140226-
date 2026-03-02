@@ -473,7 +473,7 @@ function startPetalFall() {
 
 
 //таймер
-const weddingDate = new Date("2026-07-01T10:00:00").getTime();
+const weddingDate = new Date("2026-08-01T10:00:00").getTime();
 
 function updateTimer() {
     const now = new Date().getTime();
